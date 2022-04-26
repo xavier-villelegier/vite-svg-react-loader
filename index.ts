@@ -40,7 +40,7 @@ export default function svgrPlugin(options: SvgrPluginOptions = {}): Plugin {
       const svgData = await fs.promises.readFile(svgDataPath, 'utf8')
       const componentCode = await svgr(svgData, svgrOptions, {filePath: svgDataPath})
       const component = await transform(componentCode, {loader: 'jsx'})
-      transformed.push(id)
+      transformed.push(`${id}?component`)
 
       return {code: component.code, map: null}
     },
