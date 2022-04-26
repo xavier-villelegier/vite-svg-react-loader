@@ -35,6 +35,10 @@ export default function svgrPlugin(options: SvgrPluginOptions = {}): Plugin {
     name: 'vite:svgr',
 
     async transform(code: any, id: string) {
+      if (id.indexOf('.svg') === -1) {
+        return null
+      }
+
       const svgrOptions = options?.svgrOptions ?? {}
       const svgDataPath = id
       const svgData = await fs.promises.readFile(svgDataPath, 'utf8')
