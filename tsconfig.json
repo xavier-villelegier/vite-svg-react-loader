@@ -2,7 +2,7 @@
   "files": ["index.ts"],
   "compilerOptions": {
     "target": "ESNEXT",
-    "module": "CommonJS",
+    "module": "ESNEXT",
     "declaration": true,
     "outDir": "./dist",
     "removeComments": true,
