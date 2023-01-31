@@ -1,18 +1,10 @@
-import fs from 'fs'
+import {transform as transformSvgr} from '@svgr/core'
 import {transform} from 'esbuild'
+import fs from 'fs'
 import type {Plugin} from 'vite'
 
-// Use require to prevent missing declaration file typescript errors
-// This can be turned into a regular import when @svgr/core has proper
-// typings (see https://github.com/gregberge/svgr/pull/555)
-const svgr = require('@svgr/core').default
-
 interface SvgrPluginOptions {
-  // Emit SVG assets to the production bundle even if it has been
-  // imported as a component.
   keepEmittedAssets?: boolean
-  // Options passed directly to `@svgr/core`
-  // (see https://react-svgr.com/docs/options)
   svgrOptions?: SVGROptions
 }
 
@@ -42,7 +34,7 @@ export default function svgrPlugin(options: SvgrPluginOptions = {}): Plugin {
       const svgrOptions = options?.svgrOptions ?? {}
       const svgDataPath = id
       const svgData = await fs.promises.readFile(svgDataPath, 'utf8')
-      const componentCode = await svgr(svgData, svgrOptions, {filePath: svgDataPath})
+      const componentCode = await transformSvgr(svgData, svgrOptions, {filePath: svgDataPath})
       const component = await transform(componentCode, {loader: 'jsx'})
       transformed.push(`${id}?component`)
 
